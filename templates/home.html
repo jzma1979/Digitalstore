@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>Welcome to Digital Store</h2>
+<p>Your one-stop shop for digital products.</p>
+<a href="{% url 'product_list' %}">View Products</a>
+{% endblock %}

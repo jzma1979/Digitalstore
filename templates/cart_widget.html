@@ -1,0 +1,14 @@
+<div class="cart-widget">
+    <h5>Cart</h5>
+    <p class="mb-0">
+        {% if cart_items.count > 0 %}
+            {{ cart_items.count }} item{{ cart_items.count|pluralize }} in cart
+        {% else %}
+            Cart is empty
+        {% endif %}
+    </p>
+    <p class="mb-0">
+        Total: {{ total_cost|floatformat:2 }}
+    </p>
+    <a href="{% url 'view_cart' %}" class="btn btn-primary btn-sm">View Cart</a>
+</div>

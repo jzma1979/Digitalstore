@@ -1,0 +1,8 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+  <h1>Bulk Upload Keys for {{ products|length }} product{{ products|pluralize }}</h1>
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="apply">Apply</button>
+  </form>
+{% endblock %}
