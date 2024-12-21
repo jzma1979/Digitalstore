@@ -1,14 +1,23 @@
+{% load static %}
 <div class="cart-widget">
-    <h5>Cart</h5>
-    <p class="mb-0">
-        {% if cart_items.count > 0 %}
-            {{ cart_items.count }} item{{ cart_items.count|pluralize }} in cart
-        {% else %}
-            Cart is empty
-        {% endif %}
-    </p>
-    <p class="mb-0">
-        Total: {{ total_cost|floatformat:2 }}
-    </p>
-    <a href="{% url 'view_cart' %}" class="btn btn-primary btn-sm">View Cart</a>
+    <h4>
+        <img src="{% static 'icons/cart-icon.png' %}" alt="Cart Icon" class="cart-icon"> Cart
+    </h4>
+    {% if cart_items.count > 0 %}
+        <div class="cart-items">
+            {% for item in cart_items %}
+                <div class="cart-item">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="cart-item-img">
+                    <div class="cart-item-info">
+                        <p>{{ item.product.name }}</p>
+                        <p>Quantity: {{ item.quantity }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <p class="mb-0">Total: {{ total_cost|floatformat:2 }}</p>
+        <a href="{% url 'view_cart' %}" class="btn btn-primary btn-sm">View Cart</a>
+    {% else %}
+        <p class="mb-0">Cart is empty</p>
+    {% endif %}
 </div>

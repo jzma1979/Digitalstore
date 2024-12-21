@@ -119,8 +119,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # PayPal settings
-PAYPAL_CLIENT_ID = 'AfEfvtvPSoGgelNCI-UOtQxdvMO3xy0Tq0yHKBMuuab_UOKCNyBOxRt9OaZwxSc235ymzUmHXVACBMwm'
-PAYPAL_CLIENT_SECRET = 'EBvVQTHnHgqGMCj5a5wUaoiNVQO4YJMwEtIeuprj3niAkY38TfRW7VFNbFUDDEoqTaGOwMQcr7QvGXaC'
+PAYPAL_CLIENT_ID = 'AQmpkYeucRMOqcz03wacc9HHD0urQe4BYPueBHgoGWS1EyhMI48FEdJJW4ONg6b3j2FpOxxK4dw3Rc9A'
+PAYPAL_CLIENT_SECRET = 'ELi0sngXKQj51lqH7z9cpIZ2heR98wg0QnNkqxzcOYM-PzbhdlTu_bc0lWW4wEUMxxq4otZPE9bE-3Nd'
 
 # Ensure these settings are available as environment variables
 os.environ['PAYPAL_CLIENT_ID'] = PAYPAL_CLIENT_ID

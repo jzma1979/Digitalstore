@@ -23,9 +23,17 @@ class SignUpView(generic.CreateView):
     template_name = 'registration/signup.html'
 
 
-def home(request):
-    return render(request, 'home.html')
+def get_cart_context(request):
+    if request.user.is_authenticated:
+        cart = get_object_or_404(Cart, user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart)
+        total_cost = sum(item.product.price * item.quantity for item in cart_items)
+        return {'cart_items': cart_items, 'total_cost': total_cost}
+    return {'cart_items': [], 'total_cost': 0}
 
+def home(request):
+    context = get_cart_context(request)
+    return render(request, 'home.html', context)
 
 
 def create_payment(request, product_id):
@@ -165,8 +173,9 @@ def view_cart(request):
 
     total_cost = sum(item.total_price for item in cart_items)
 
-    return render(request, 'cart.html', {'cart_items': cart_items, 'total_cost': total_cost})
-
+    context = {'cart_items': cart_items, 'total_cost': total_cost}
+    context.update(get_cart_context(request))
+    return render(request, 'cart.html', context)
 
 
 
@@ -222,7 +231,9 @@ def checkout(request):
         return redirect('payment_success')
 
     total_cost = sum(item.product.price * item.quantity for item in items if item.selected)
-    return render(request, 'checkout.html', {'items': items, 'total_cost': total_cost})
+    context = {'items': items, 'total_cost': total_cost}
+    context.update(get_cart_context(request))
+    return render(request, 'checkout.html', context)
 
 @login_required
 def payment_success(request):
@@ -260,7 +271,6 @@ def payment_success(request):
     return render(request, 'success.html', {'order': order})
 
 
-
 def add_product(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -269,10 +279,6 @@ def add_product(request):
         Product.objects.create(name=name, price=price, description=description)
         return redirect('home')
     return render(request, 'add_product.html')
-
-
-
-
 
 
 def product_list(request):
@@ -298,11 +304,9 @@ def product_list(request):
     except EmptyPage:
         products = paginator.page(paginator.num_pages)
 
-    return render(request, 'product_list.html', {'products': products})
-
-
-
-
+    context = {'products': products}
+    context.update(get_cart_context(request))
+    return render(request, 'product_list.html', context)
 
 
 def register(request):
@@ -316,9 +320,6 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
-
-
-
 @login_required
 def profile(request):
     user = request.user
@@ -326,13 +327,9 @@ def profile(request):
     purchased_keys = user_profile.purchased_keys.all()
     orders = Order.objects.filter(user=user)
 
-    # Debug prints
-    print(f"Purchased keys: {purchased_keys}")
-
-    return render(request, 'profile.html', {'user_profile': user_profile, 'orders': orders, 'purchased_keys': purchased_keys})
-
-
-
+    context = {'user_profile': user_profile, 'orders': orders, 'purchased_keys': purchased_keys}
+    context.update(get_cart_context(request))
+    return render(request, 'profile.html', context)
 
 
 @login_required
@@ -351,18 +348,12 @@ def update_profile(request):
     return render(request, 'update_profile.html')
 
 
-
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     reviews = Review.objects.filter(product=product)
-    if request.method == 'POST':
-        if request.user.is_authenticated:
-            rating = request.POST['rating']
-            comment = request.POST['comment']
-            Review.objects.create(product=product, user=request.user, rating=rating, comment=comment)
-            return redirect('product_detail', product_id=product_id)
-    return render(request, 'product_detail.html', {'product': product, 'reviews': reviews})
-
+    context = {'product': product, 'reviews': reviews}
+    context.update(get_cart_context(request))
+    return render(request, 'product_detail.html', context)
 
 
 logger = logging.getLogger(__name__)

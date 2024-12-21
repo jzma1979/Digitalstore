@@ -2,7 +2,7 @@
 <html>
 <head>
     {% load static %}
-    <title>{% block title %}Digital Store{% endblock %}</title>
+    <title>{% block title %}Digikey Outlet{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
     <style>
         nav ul {
@@ -25,37 +25,128 @@
             cursor: pointer;
             font: inherit;
         }
+        /* Add styles for the hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 4px 0;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: #343a40;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                padding: 0;
+            }
+
+            nav ul li {
+                width: 100%;
+                text-align: center;
+                margin: 0;
+            }
+
+            nav ul li a {
+                padding: 15px;
+                display: block;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        .cart-widget {
+            position: fixed;
+            bottom: 100px;
+            right: 15px;
+            background-color: rgb(75, 75, 75);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        header h1 {
+            color: white;
+            font-size: 35px;
+            text-align: center;
+            flex: 0 0 auto;
+            margin: 0;
+            margin-left: 140px; /* Adjust only the h1 margin without affecting nav links */
+        }
+
+        nav {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Digital Store</h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'product_list' %}">Products</a></li>
-                <li><a href="{% url 'view_cart' %}">Cart</a></li>
-                <li><a href="{% url 'checkout' %}">Checkout</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'profile' %}">Profile</a></li> <!-- Profile link added -->
-                    <li>
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit">Logout</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li><a href="{% url 'register' %}">Register</a></li>
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+        <div class="header-container">
+            <div class="hamburger" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <h1>Digikey Outlet</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'product_list' %}">Products</a></li>
+                    <li><a href="{% url 'view_cart' %}">Cart</a></li>
+                    <li><a href="{% url 'checkout' %}">Checkout</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit">Logout</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Register</a></li>
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </header>
     <main>
         {% block content %}{% endblock %}
     </main>
     <footer>
-        <p>&copy; 2024 Digital Store</p>
+        <p>&copy; 2024 Digikey Outlet</p>
     </footer>
+    <div class="cart-widget">
+        {% include 'cart_widget.html' %}
+    </div>
+    <script>
+        function toggleMenu() {
+            const nav = document.querySelector('nav ul');
+            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+        }
+    </script>
 </body>
 </html>
