@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">User Profile</h2>
+    <table class="table table-striped table-hover profile-table">
+        <tr>
+            <th class="dark-bg">First Name</th>
+            <td class="dark-bg">{{ user.first_name }}</td>
+        </tr>
+        <tr>
+            <th class="dark-bg">Last Name</th>
+            <td class="dark-bg">{{ user.last_name }}</td>
+        </tr>
+        <tr>
+            <th class="dark-bg">Email</th>
+            <td class="dark-bg">{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th class="dark-bg">Address</th>
+            <td class="dark-bg">{{ user_profile.address }}</td>
+        </tr>
+        <tr>
+            <th class="dark-bg">Phone</th>
+            <td class="dark-bg">{{ user_profile.phone }}</td>
+        </tr>
+    </table>
+    <a href="{% url 'update_profile' %}" class="btn btn-primary mt-3">Edit Profile</a>
+
+    <h2 class="mt-5 mb-4">Purchased Keys</h2>
+    {% if purchased_keys %}
+        <table class="table table-striped table-hover profile-table">
+            <thead>
+                <tr>
+                    <th class="dark-bg">Product</th>
+                    <th class="dark-bg">Key</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key in purchased_keys %}
+                    <tr>
+                        <td>{{ key.product.name }}</td>
+                        <td>{{ key.key }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No purchased keys found.</p>
+    {% endif %}
+
+    <h2 class="mt-5 mb-4">Order History</h2>
+    {% if orders %}
+        <table class="table table-striped table-hover order-table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="dark-bg">Order ID</th>
+                    <th scope="col" class="dark-bg">Date</th>
+                    <th scope="col" class="dark-bg">Total Amount</th>
+                    <th scope="col" class="dark-bg">Items</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.order_date }}</td>
+                    <td>${{ order.total_amount }}</td>
+                    <td>
+                        <ul class="list-unstyled mb-0">
+                        {% for item in order.orderitem_set.all %}
+                            <li>{{ item.product.name }} (x{{ item.quantity }})</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No orders found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+<style>
+    .profile-table, .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    .profile-table th, .profile-table td, .order-table th, .order-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    .profile-table th, .order-table th {
+        background-color: #343a40;
+        color: white;
+        text-align: left;
+    }
+    .profile-table tr:nth-child(even), .order-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .dark-bg {
+        background-color: #6c757d;
+        color: white;
+    }
+</style>

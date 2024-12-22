@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Checkout</h2>
+    <form method="post" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="update">
+        <table class="table table-striped table-hover checkout-table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Select</th>
+                    <th scope="col">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr data-item-id="{{ item.id }}">
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail" style="width:50px; height:auto; margin-right: 10px;">
+                            <div>
+                                <strong>{{ item.product.name }}</strong>
+                                <p class="mb-0 text-muted">{{ item.product.description }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.product.price }}</td>
+                    <td>
+                        <input type="checkbox" name="selected_{{ item.id }}" {% if item.selected %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-from-cart">Remove</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <button type="submit" name="update" class="btn btn-primary">Update Selection</button>
+            <p class="mb-0"><strong>Total Cost: ${{ total_cost }}</strong></p>
+        </div>
+    </form>
+    <div id="paypal-button-container" class="mt-4"></div>
+</div>
+
+<!-- Verify PayPal Client ID -->
+<script>
+    console.log("PayPal Client ID: {{ PAYPAL_CLIENT_ID }}");
+</script>
+
+<!-- PayPal SDK Script -->
+<script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
+
+<!-- PayPal Buttons Initialization -->
+<script>
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: { value: '{{ total_cost }}' }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                window.location.href = "/payment_success/";
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
+
+<!-- Remove from Cart Script -->
+<script>
+    document.querySelectorAll('.remove-from-cart').forEach(button => {
+        button.addEventListener('click', function(event) {
+            const cartItem = event.target.closest('tr');
+            const itemId = cartItem.getAttribute('data-item-id');
+            const isSelected = cartItem.querySelector(`input[name="selected_${itemId}"]`).checked;
+
+            if (!isSelected) {
+                alert('Please select the item before removing it.');
+                return;
+            }
+
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch(`/remove_from_cart/${itemId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cartItem.remove();
+                    // Alert is removed for successful removal
+                } else {
+                    alert('There was an error removing the item from the cart: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('There was an error removing the item from the cart.');
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+
+<!-- Styles -->
+<style>
+    .checkout-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    .checkout-table th, .checkout-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    .checkout-table th {
+        background-color: #343a40;
+        color: white;
+        text-align: left;
+    }
+    .checkout-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .img-thumbnail {
+        border: none;
+    }
+</style>

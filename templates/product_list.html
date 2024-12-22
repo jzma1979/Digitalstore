@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Products</h2>
+    <form method="get" action="{% url 'product_list' %}" class="row g-3 mb-4">
+        <div class="col-md-6">
+            <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ request.GET.q }}">
+        </div>
+        <div class="col-md-4">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                <!-- (other category options) -->
+                <!-- Your category options here -->
+                <option value="adguard" {% if request.GET.category == 'adguard' %}selected{% endif %}>AdGuard Products</option>
+                <option value="adobe" {% if request.GET.category == 'adobe' %}selected{% endif %}>Adobe Products</option>
+                <option value="aida64" {% if request.GET.category == 'aida64' %}selected{% endif %}>AIDA64 Products</option>
+                <option value="aiseesoft" {% if request.GET.category == 'aiseesoft' %}selected{% endif %}>Aiseesoft Products</option>
+                <option value="aomei" {% if request.GET.category == 'aomei' %}selected{% endif %}>AOMEI Products</option>
+                <option value="ashampoo" {% if request.GET.category == 'ashampoo' %}selected{% endif %}>Ashampoo Products</option>
+                <option value="autodesk" {% if request.GET.category == 'autodesk' %}selected{% endif %}>Autodesk Products</option>
+                <option value="bitdefender" {% if request.GET.category == 'bitdefender' %}selected{% endif %}>Bitdefender Products</option>
+                <option value="ccleaner" {% if request.GET.category == 'ccleaner' %}selected{% endif %}>CCleaner Products</option>
+                <option value="corel" {% if request.GET.category == 'corel' %}selected{% endif %}>Corel Products</option>
+                <option value="drivermagician" {% if request.GET.category == 'drivermagician' %}selected{% endif %}>DriverMagician Products</option>
+                <option value="easeus" {% if request.GET.category == 'easeus' %}selected{% endif %}>EaseUS Products</option>
+                <option value="eset" {% if request.GET.category == 'eset' %}selected{% endif %}>ESET Products</option>
+                <option value="glarysoft" {% if request.GET.category == 'glarysoft' %}selected{% endif %}>Glarysoft Products</option>
+                <option value="kaspersky" {% if request.GET.category == 'kaspersky' %}selected{% endif %}>Kaspersky Products</option>
+                <option value="macos" {% if request.GET.category == 'macos' %}selected{% endif %}>MacOs Software</option>
+                <option value="office2013" {% if request.GET.category == 'office2013' %}selected{% endif %}>Microsoft Office 2013 Products</option>
+                <option value="office2016" {% if request.GET.category == 'office2016' %}selected{% endif %}>Microsoft Office 2016 Products</option>
+                <option value="office2019" {% if request.GET.category == 'office2019' %}selected{% endif %}>Microsoft Office 2019 Products</option>
+                <option value="office2021" {% if request.GET.category == 'office2021' %}selected{% endif %}>Microsoft Office 2021 Products</option>
+                <option value="office2024" {% if request.GET.category == 'office2024' %}selected{% endif %}>Microsoft Office 2024 Products</option>
+                <option value="office365" {% if request.GET.category == 'office365' %}selected{% endif %}>Microsoft Office 365 Products</option>
+                <option value="server" {% if request.GET.category == 'server' %}selected{% endif %}>Microsoft Server Products</option>
+                <option value="sql" {% if request.GET.category == 'sql' %}selected{% endif %}>Microsoft SQL Server Products</option>
+                <option value="visualstudio" {% if request.GET.category == 'visualstudio' %}selected{% endif %}>Microsoft Visual Studio Products</option>
+                <option value="windows10" {% if request.GET.category == 'windows10' %}selected{% endif %}>Microsoft Windows 10 Products</option>
+                <option value="windows11" {% if request.GET.category == 'windows11' %}selected{% endif %}>Microsoft Windows 11 Products</option>
+                <option value="windows7" {% if request.GET.category == 'windows7' %}selected{% endif %}>Microsoft Windows 7 Products</option>
+                <option value="windows8" {% if request.GET.category == 'windows8' %}selected{% endif %}>Microsoft Windows 8 Products</option>
+                <option value="mindmanager" {% if request.GET.category == 'mindmanager' %}selected{% endif %}>MindManager Products</option>
+                <option value="nitro" {% if request.GET.category == 'nitro' %}selected{% endif %}>Nitro Products</option>
+                <option value="spotify" {% if request.GET.category == 'spotify' %}selected{% endif %}>Spotify Subscription</option>
+                <option value="subscription" {% if request.GET.category == 'subscription' %}selected{% endif %}>Subscription and Credits</option>
+                <option value="symantec" {% if request.GET.category == 'symantec' %}selected{% endif %}>Symantec Products</option>
+                <option value="vmware" {% if request.GET.category == 'vmware' %}selected{% endif %}>VMware Products</option>
+                <option value="vpn" {% if request.GET.category == 'vpn' %}selected{% endif %}>VPN Products</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for product in products %}
+            <div class="col">
+                <div class="card h-100">
+                    <a href="{% url 'product_detail' product.id %}">
+                        <div class="card-img-top-container">
+                            <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.name }}">
+                        </div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-link read-more-btn">Read more</a>
+                        <p class="card-text"><strong>${{ product.price }}</strong></p>
+                        <form class="add-to-cart-form" method="post" action="{% url 'add_to_cart' product.id %}">
+                            {% csrf_token %}
+                            <div class="d-flex align-items-center">
+                                <input type="number" name="quantity" value="1" min="1" class="form-control me-2 quantity-input" style="width: 70px;">
+                                <button type="submit" class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                            </div>
+                        </form>
+                        <div class="add-to-cart-message mt-3" style="display:none; color: green;">Added to cart!</div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-4">
+            {% if products.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for i in products.paginator.page_range %}
+                {% if products.number == i %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <a href="{% url 'view_cart' %}" class="btn btn-secondary mt-4">View Cart</a>
+</div>
+
+<script>
+document.querySelectorAll('.add-to-cart-form').forEach(form => {
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent the form from submitting the normal way
+        const formData = new FormData(form);
+        const url = form.action;
+        
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = "{% url 'view_cart' %}";
+            } else {
+                alert('There was an error adding the item to the cart.');
+            }
+        })
+        .catch(error => {
+            alert('There was an error adding the item to the cart.');
+        });
+    });
+});
+</script>
+{% endblock %}
