@@ -13,11 +13,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = 'mIXdFGVeuchYKwxAR-ahqYlavLdgs7_FM1fX6abSxhpManfRktf6q9G77rcdYZ-1DHk'
+SECRET_KEY = 'YOUR-SECRET-KEY-HERE'
 
 # PayPal settings
-PAYPAL_CLIENT_ID = 'AQA-5WC82MafxDDCgGHQQELhJ6Js3Tzik0rtSNZRSRCntb30xa_-wo_A9pQwPI5LBJQU4b4lZD9DYDMj'
-PAYPAL_CLIENT_SECRET = 'EIM7D7M119f56inDQQB6mYWZ2Muw3OYOY-mOuxbQIdiU0JQCUvmxVkxsSKdOR3wMWVcQ0d0ytqYpgMD9'
+PAYPAL_CLIENT_ID = 'YOUR-ID-HERE'
+PAYPAL_CLIENT_SECRET = 'YOUR-SECRET-HERE'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
