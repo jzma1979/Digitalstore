@@ -281,6 +281,7 @@ def add_product(request):
     return render(request, 'add_product.html')
 
 
+
 def product_list(request):
     category = request.GET.get('category')
     query = request.GET.get('q')  # Get the search query
@@ -291,7 +292,7 @@ def product_list(request):
 
     if query:
         products = products.filter(
-            Q(name__icontains=query) | Q(description__icontains(query))
+            Q(name__icontains=query) | Q(description__icontains=query)  # Corrected syntax here
         )
 
     paginator = Paginator(products, 12)  # Show 12 products per page
@@ -307,6 +308,7 @@ def product_list(request):
     context = {'products': products}
     context.update(get_cart_context(request))
     return render(request, 'product_list.html', context)
+
 
 
 def register(request):

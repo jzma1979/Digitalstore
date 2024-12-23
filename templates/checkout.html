@@ -8,40 +8,41 @@
     <form method="post" action="{% url 'checkout' %}">
         {% csrf_token %}
         <input type="hidden" name="action" value="update">
-        <table class="table table-striped table-hover checkout-table">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Product</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Select</th>
-                    <th scope="col">Remove</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                <tr data-item-id="{{ item.id }}">
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail" style="width:50px; height:auto; margin-right: 10px;">
-                            <div>
-                                <strong>{{ item.product.name }}</strong>
-                                <p class="mb-0 text-muted">{{ item.product.description }}</p>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover checkout-table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Select</th>
+                        <th scope="col">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr data-item-id="{{ item.id }}">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail" style="width:50px; height:auto; margin-right: 10px;">
+                                <div>
+                                    <strong>{{ item.product.name }}</strong>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td>{{ item.quantity }}</td>
-                    <td>${{ item.product.price }}</td>
-                    <td>
-                        <input type="checkbox" name="selected_{{ item.id }}" {% if item.selected %}checked{% endif %}>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger remove-from-cart">Remove</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.product.price }}</td>
+                        <td>
+                            <input type="checkbox" name="selected_{{ item.id }}" {% if item.selected %}checked{% endif %}>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger remove-from-cart">Remove</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <div class="d-flex justify-content-between align-items-center mt-4">
             <button type="submit" name="update" class="btn btn-primary">Update Selection</button>
             <p class="mb-0"><strong>Total Cost: ${{ total_cost }}</strong></p>
@@ -118,26 +119,4 @@
 
 {% endblock %}
 
-<!-- Styles -->
-<style>
-    .checkout-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-    .checkout-table th, .checkout-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-    .checkout-table th {
-        background-color: #343a40;
-        color: white;
-        text-align: left;
-    }
-    .checkout-table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    .img-thumbnail {
-        border: none;
-    }
-</style>
+

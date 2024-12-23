@@ -12,8 +12,6 @@
         <div class="col-md-4">
             <select name="category" class="form-select">
                 <option value="">All Categories</option>
-                <!-- (other category options) -->
-                <!-- Your category options here -->
                 <option value="adguard" {% if request.GET.category == 'adguard' %}selected{% endif %}>AdGuard Products</option>
                 <option value="adobe" {% if request.GET.category == 'adobe' %}selected{% endif %}>Adobe Products</option>
                 <option value="aida64" {% if request.GET.category == 'aida64' %}selected{% endif %}>AIDA64 Products</option>
@@ -53,7 +51,7 @@
             </select>
         </div>
         <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Filter</button>
+            <button type="submit" class="btn btn-primary w-100" style="margin: 10px 0;">Filter</button>
         </div>
     </form>
 
@@ -68,13 +66,13 @@
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                        <p class="card-text">{{ product.description|truncatewords:20 }}</p>
                         <a href="{% url 'product_detail' product.id %}" class="btn btn-link read-more-btn">Read more</a>
-                        <p class="card-text"><strong>${{ product.price }}</strong></p>
+                        <p class="card-text" style="font-size: 1.2rem;"><strong>${{ product.price }}</strong></p>
                         <form class="add-to-cart-form" method="post" action="{% url 'add_to_cart' product.id %}">
                             {% csrf_token %}
                             <div class="d-flex align-items-center">
-                                <input type="number" name="quantity" value="1" min="1" class="form-control me-2 quantity-input" style="width: 70px;">
+                                <input type="number" name="quantity" value="1" min="1" class="form-control me-2 quantity-input" style="width: 40px; margin-right: 10px;">
                                 <button type="submit" class="btn btn-success add-to-cart-btn">Add to Cart</button>
                             </div>
                         </form>
@@ -86,8 +84,8 @@
     </div>
 
     <!-- Pagination -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mt-4">
+    <div class="paginator-container">
+        <ul class="pagination">
             {% if products.has_previous %}
                 <li class="page-item">
                     <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
@@ -110,9 +108,9 @@
                 </li>
             {% endif %}
         </ul>
-    </nav>
+    </div>
 
-    <a href="{% url 'view_cart' %}" class="btn btn-secondary mt-4">View Cart</a>
+    
 </div>
 
 <script>

@@ -3,6 +3,7 @@
 <head>
     {% load static %}
     <title>{% block title %}Digikey Outlet{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
     <style>
         nav ul {
@@ -25,15 +26,16 @@
             cursor: pointer;
             font: inherit;
         }
-        /* Add styles for the hamburger menu */
+
+        /* Hamburger menu styles */
         .hamburger {
             display: none;
             flex-direction: column;
             cursor: pointer;
-            position: absolute; /* Position it absolutely */
-            top: 0; /* Align to the top of the header */
-            right: 0; /* Align to the right side */
-            margin: 15px 20px; /* Adjust the margin as needed */
+            position: absolute;
+            top: -5px;
+            right: 0;
+            margin: 15px 20px;
         }
 
         .hamburger div {
@@ -53,17 +55,24 @@
                 top: 60px;
                 left: 0;
                 padding: 0;
+                height: calc(100vh - 60px);
+                align-items: center; /* Center align items */
             }
 
             nav ul li {
                 width: 100%;
                 text-align: center;
                 margin: 0;
+                padding: 10px;
             }
 
             nav ul li a {
                 padding: 15px;
                 display: block;
+            }
+
+            nav ul li form button { 
+                padding: 10px; /* Add padding specifically for the logout button */
             }
 
             .hamburger {
@@ -80,19 +89,15 @@
             padding: 10px;
             border-radius: 5px;
             z-index: 1000;
-            width: 200px; /* Default size */
-            transition: transform 0.3s ease; /* Smooth transition for resizing */
+            width: 159px;
+            transition: transform 0.3s ease;
         }
-        
+
         @media (max-width: 768px) {
             .cart-widget {
-                transform: scale(0.75); /* Scale down the widget to 75% of its original size */
-                bottom: 50px; /* Adjust position if needed */
-                right: -10px; /* Adjust position if needed */
+                display: none;
             }
         }
-        
-        
 
         .header-container {
             display: flex;
@@ -109,8 +114,8 @@
             font-size: 35px;
             text-align: center;
             flex: 0 0 auto;
-            margin: 0;
-            margin-left: 80px; /* Adjust only the h1 margin without affecting nav links */
+            margin: -5px 0 0 0;
+            margin-left: 40px;
         }
 
         nav {
@@ -118,7 +123,7 @@
         }
 
         .logo {
-            margin-left: 20px; /* Adjust the space between logo and title */
+            margin-left: 20px;
         }
     </style>
 </head>
@@ -130,7 +135,9 @@
                 <div></div>
                 <div></div>
             </div>
-            <img src="{% static 'images/logo.png' %}" alt="Digikey Outlet Logo" class="logo" width="50" height="50">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Digikey Outlet Logo" class="logo" width="50" height="50">
+            </a>
             <h1>Digikey Outlet</h1>
             <nav>
                 <ul>
@@ -171,5 +178,30 @@
             nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
         }
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuOverlay = document.querySelector('nav ul');
+            const menuToggle = document.querySelector('.hamburger');
+    
+            function closeMenu() {
+                if (menuOverlay && menuOverlay.style.display === 'flex') {
+                    menuOverlay.style.display = 'none';
+                }
+                if (menuToggle && menuToggle.classList.contains('active')) {
+                    menuToggle.classList.remove('active');
+                }
+            }
+    
+            closeMenu();
+    
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    closeMenu();
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>
+
