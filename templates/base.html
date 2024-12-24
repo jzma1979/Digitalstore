@@ -3,6 +3,7 @@
 <head>
     {% load static %}
     <title>{% block title %}Digikey Outlet{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
     <style>
         nav ul {
@@ -25,11 +26,16 @@
             cursor: pointer;
             font: inherit;
         }
-        /* Add styles for the hamburger menu */
+
+        /* Hamburger menu styles */
         .hamburger {
             display: none;
             flex-direction: column;
             cursor: pointer;
+            position: absolute;
+            top: -5px;
+            right: 0;
+            margin: 15px 20px;
         }
 
         .hamburger div {
@@ -49,17 +55,24 @@
                 top: 60px;
                 left: 0;
                 padding: 0;
+                height: calc(100vh - 60px);
+                align-items: center; /* Center align items */
             }
 
             nav ul li {
                 width: 100%;
                 text-align: center;
                 margin: 0;
+                padding: 10px;
             }
 
             nav ul li a {
                 padding: 15px;
                 display: block;
+            }
+
+            nav ul li form button { 
+                padding: 10px; /* Add padding specifically for the logout button */
             }
 
             .hamburger {
@@ -76,6 +89,14 @@
             padding: 10px;
             border-radius: 5px;
             z-index: 1000;
+            width: 159px;
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .cart-widget {
+                display: none;
+            }
         }
 
         .header-container {
@@ -93,12 +114,16 @@
             font-size: 35px;
             text-align: center;
             flex: 0 0 auto;
-            margin: 0;
-            margin-left: 140px; /* Adjust only the h1 margin without affecting nav links */
+            margin: -5px 0 0 0;
+            margin-left: 40px;
         }
 
         nav {
             flex: 1;
+        }
+
+        .logo {
+            margin-left: 20px;
         }
     </style>
 </head>
@@ -110,6 +135,9 @@
                 <div></div>
                 <div></div>
             </div>
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Digikey Outlet Logo" class="logo" width="50" height="50">
+            </a>
             <h1>Digikey Outlet</h1>
             <nav>
                 <ul>
@@ -139,14 +167,41 @@
     <footer>
         <p>&copy; 2024 Digikey Outlet</p>
     </footer>
-    <div class="cart-widget">
-        {% include 'cart_widget.html' %}
-    </div>
+    {% if user.is_authenticated %}
+        <div class="cart-widget">
+            {% include 'cart_widget.html' %}
+        </div>
+    {% endif %}
     <script>
         function toggleMenu() {
             const nav = document.querySelector('nav ul');
             nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
         }
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuOverlay = document.querySelector('nav ul');
+            const menuToggle = document.querySelector('.hamburger');
+    
+            function closeMenu() {
+                if (menuOverlay && menuOverlay.style.display === 'flex') {
+                    menuOverlay.style.display = 'none';
+                }
+                if (menuToggle && menuToggle.classList.contains('active')) {
+                    menuToggle.classList.remove('active');
+                }
+            }
+    
+            closeMenu();
+    
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    closeMenu();
+                }
+            });
+        });
+    </script>
+    <script src="{% static 'js/slider.js' %}"></script>
 </body>
 </html>
+

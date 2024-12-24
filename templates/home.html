@@ -1,9 +1,35 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h2>Welcome to Digital Store</h2>
-<p>Your one-stop shop for digital products.</p>
-<a href="{% url 'product_list' %}">View Products</a>
+<!-- Slider Section -->
+<div class="full-height-slider">
+    <div class="slides">
+        <div class="slide desktop-slide" style="background-image: url('{% static 'images/slider1.jpg' %}');"></div>
+        <div class="slide desktop-slide" style="background-image: url('{% static 'images/slider2.jpg' %}');"></div>
+        <div class="slide desktop-slide" style="background-image: url('{% static 'images/slider3.jpg' %}');"></div>
+    </div>
+    <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+    <button class="next" onclick="changeSlide(1)">&#10095;</button>
+</div>
+
+<!-- Product Sections -->
+<div class="product-sections">
+    <div class="section">
+        <h3></h3>
+        <div class="products">
+            {% for product in products %}
+                <div class="product-card custom-card-bg-home">
+                    <a href="{% url 'product_detail' product.id %}">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+                        <h4>{{ product.name }}</h4>
+                        <p class="custom-price-text-home">Price: ${{ product.price }}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

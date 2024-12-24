@@ -24,7 +24,6 @@
                             <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail" style="width:50px; height:auto; margin-right: 10px;">
                             <div>
                                 <strong>{{ item.product.name }}</strong>
-                                <p class="mb-0 text-muted">{{ item.product.description }}</p>
                             </div>
                         </div>
                     </td>
@@ -44,8 +43,9 @@
             <p class="mb-0"><strong>Total Cost: ${{ total_cost }}</strong></p>
         </div>
     </form>
-    <div class="d-flex justify-content-end mt-4">
-        <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
+    <div class="button-container mt-4">
+        <a href="{% url 'checkout' %}" class="btn btn-success btn-custom mb-2">Proceed to Checkout</a>
+        <a href="{% url 'product_list' %}" class="btn btn-secondary view-product-btn">Back to Products</a>
     </div>
 </div>
 
@@ -102,5 +102,18 @@ document.querySelectorAll('.remove-from-cart').forEach(button => {
     }
     .img-thumbnail {
         border: none;
+    }
+    /* Button Styles */
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+    .d-flex.flex-column.align-items-end.mt-4 {
+        width: 100%;
     }
 </style>

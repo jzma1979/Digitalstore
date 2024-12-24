@@ -15,6 +15,7 @@ from django.core.mail import send_mail
 import logging
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+import random
 
 
 class SignUpView(generic.CreateView):
@@ -25,15 +26,19 @@ class SignUpView(generic.CreateView):
 
 def get_cart_context(request):
     if request.user.is_authenticated:
-        cart = get_object_or_404(Cart, user=request.user)
+        cart, created = Cart.objects.get_or_create(user=request.user)
         cart_items = CartItem.objects.filter(cart=cart)
         total_cost = sum(item.product.price * item.quantity for item in cart_items)
         return {'cart_items': cart_items, 'total_cost': total_cost}
     return {'cart_items': [], 'total_cost': 0}
 
+
 def home(request):
-    context = get_cart_context(request)
-    return render(request, 'home.html', context)
+    products = list(Product.objects.all())
+    random.shuffle(products)
+    products = products[:12]
+    return render(request, 'home.html', {'products': products})
+
 
 
 def create_payment(request, product_id):
@@ -281,6 +286,7 @@ def add_product(request):
     return render(request, 'add_product.html')
 
 
+
 def product_list(request):
     category = request.GET.get('category')
     query = request.GET.get('q')  # Get the search query
@@ -291,7 +297,7 @@ def product_list(request):
 
     if query:
         products = products.filter(
-            Q(name__icontains=query) | Q(description__icontains(query))
+            Q(name__icontains=query) | Q(description__icontains=query)  # Corrected syntax here
         )
 
     paginator = Paginator(products, 12)  # Show 12 products per page
@@ -307,6 +313,7 @@ def product_list(request):
     context = {'products': products}
     context.update(get_cart_context(request))
     return render(request, 'product_list.html', context)
+
 
 
 def register(request):

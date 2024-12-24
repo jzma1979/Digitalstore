@@ -12,12 +12,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'Your-secret-key'
+
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '192.168.0.12',
+]
 
 
 # Application definition
@@ -118,9 +124,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-# PayPal settings
-PAYPAL_CLIENT_ID = 'YOUR-PAYPAL-ID'
-PAYPAL_CLIENT_SECRET = 'EYOUR-PAYPAL-SECRET'
+
+
 
 # Ensure these settings are available as environment variables
 os.environ['PAYPAL_CLIENT_ID'] = PAYPAL_CLIENT_ID

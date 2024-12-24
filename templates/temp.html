@@ -35,3 +35,202 @@
         <option value="symantec" {% if request.GET.category == 'symantec' %}selected{% endif %}>Symantec Products</option>
         <option value="vmware" {% if request.GET.category == 'vmware' %}selected{% endif %}>VMware Products</option>
         <option value="vpn" {% if request.GET.category == 'vpn' %}selected{% endif %}>VPN Products</option>
+
+        /* Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Allow pagination items to wrap */
+    margin-top: 25px;
+    padding-top: 10px;
+}
+
+.pagination .page-item {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.pagination .page-item .page-link {
+    color: #343a40;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: auto;
+    height: auto;
+    padding: 0.5em 1em; /* Adjust padding for responsiveness */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination .page-item.active .page-link {
+    color: white;
+    background-color: #5f5e5e;
+    border-color: #000000;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #ddd;
+    color: #343a40;
+}
+
+@media (max-width: 768px) {
+    .pagination {
+        justify-content: center; /* Center pagination items on mobile */
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    }
+
+    .pagination .page-item {
+        margin: 2px; /* Adjust margin for mobile */
+    }
+
+    .pagination .page-item .page-link {
+        width: auto; /* Ensure width is responsive */
+        height: auto; /* Ensure height is responsive */
+        padding: 0.5em 1em; /* Adjust padding for mobile */
+        font-size: 14px; /* Adjust font size for mobile */
+    }
+}
+/* Ensure containers fit the screen on mobile devices */
+.container {
+    max-width: 100%;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .cart-widget {
+        transform: scale(0.75);
+        bottom: 50px;
+        right: 15px;
+    }
+
+    .pagination {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #343a40;
+        padding: 10px 0;
+        z-index: 999;
+    }
+
+    .pagination .page-item .page-link {
+        color: white;
+        background-color: #343a40;
+        border: none;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #ff5722;
+        border: none;
+    }
+}
+
+/*new styles proba*/
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ec1111;
+    border-radius: 10px;
+    background-color: #f9f9f9a8;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container .btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff9100;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-container .btn:hover {
+    background-color: #ff3c00;
+}
+
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container .btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-container .btn:hover {
+    background-color: #0056b3;
+}
+
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #b41212;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container .btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-container .btn:hover {
+    background-color: #0056b3;
+}
+
+.row-cols-1.row-cols-md-4.g-4.mt-4 {
+    margin-top: 20px;
+}
